@@ -1,0 +1,15 @@
+#cloud-config
+packages:
+  - nginx
+users:
+  - name: arafato
+    ssh-authorized-keys:
+      - ssh-rsa 
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: sudo
+    shell: /bin/bash
+runcmd:
+  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '$aAllowUsers arafato' /etc/ssh/sshd_config
+  - restart ssh
+  - VERSION=2.1.55 /bin/bash -c "$(curl -s https://cms-agent-eu-central-1.oss-eu-central-1-internal.aliyuncs.com/cms-go-agent/cms_go_agent_install.sh)"i
